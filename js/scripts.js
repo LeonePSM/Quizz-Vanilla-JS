@@ -92,6 +92,37 @@ function createQuestion(i) {
 
   questionText.textContent = questions[i].question;
   questionNumber.textContent = i + 1;
+
+   // Insere alternativas
+   questions[i].answers.forEach(function(answer, i) {
+    
+    // Altera texto do template
+    const answerTemplate = document.querySelector(".answer-template").cloneNode(true);
+
+    const letterBtn = answerTemplate.querySelector(".btn-letter");
+    const answerText = answerTemplate.querySelector(".question-answer");
+
+    letterBtn.textContent = letters[i];
+    answerText.textContent = answer['answer'];
+
+    answerTemplate.setAttribute("correct-answer", answer["correct"]);
+
+    // remove classe de hide e template do template
+    answerTemplate.classList.remove("hide");
+    answerTemplate.classList.remove("answer-template");
+
+    // Insere template na tela
+    answersBox.appendChild(answerTemplate);
+
+    answerTemplate.addEventListener("click", function() {
+      console.log(this);
+    })
+
+  });
+
+  // Incrementa o número atual de questões
+  actualQuestion++;
 }
+
 
 init();
