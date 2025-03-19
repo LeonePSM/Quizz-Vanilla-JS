@@ -115,7 +115,7 @@ function createQuestion(i) {
     answersBox.appendChild(answerTemplate);
 
     answerTemplate.addEventListener("click", function() {
-      console.log(this);
+      checkAnswer(this);
     })
 
   });
@@ -125,4 +125,85 @@ function createQuestion(i) {
 }
 
 
+function checkAnswer(btn) {
+
+    const buttons = answersBox.querySelectorAll("button");
+
+    buttons.forEach(function(button) {
+
+      if(button.getAttribute("correct-answer") === "true") {
+
+        button.classList.add("correct-answer");
+
+        if(btn === button) {
+          points++;
+        }
+
+      } else {
+
+        button.classList.add("wrong-answer");
+      }
+    });
+
+    nextQuestion();
+
+}
+
+// Exibe a próxima pergunta
+function nextQuestion() {
+
+  // Timer para ver se acertou ou errou
+  setTimeout(function() {
+
+    // checa se ainda há mais perguntas
+    if(actualQuestion >= questions.length) {
+      // apresenta msg de sucesso
+      showSuccessMessage();
+      return;
+    }
+
+    createQuestion(actualQuestion)
+
+  }, 1000);
+
+}
+
+// Tela final
+function showSuccessMessage() {
+
+  hideOrShowQuizz();
+
+  // calc score
+  const score = ((points / questions.length) * 100).toFixed(2);
+  const scoreDisplay = document.querySelector("#display-score span");
+
+  scoreDisplay.textContent = score.toString();
+
+  // alterar número de perguntas corretas
+  const correctAnswers = document.querySelector("#correct-answers");
+  correctAnswers.textContent = points;
+
+  // alterar total de perguntas
+  const totalQuestions = document.querySelector("#questions-qty");
+  totalQuestions.textContent = questions.length;
+
+}
+
+// Reiniciar Quizz
+const restartBtn = document.querySelector("#restart");
+
+restartBtn.addEventListener("click", function() {
+  actualQuestion = 0;
+  points = 0;
+  hideOrShowQuizz();
+  init();
+});
+
+// Mostra ou exibe o quizz
+function hideOrShowQuizz() {
+  quizzContainer.classList.toggle("hide");
+  scoreContainer.classList.toggle("hide");
+}
+
+//inicializando o quizz
 init();
